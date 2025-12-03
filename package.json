@@ -1,0 +1,25 @@
+{
+  "name": "bmas_hr_system",
+  "version": "1.0.0",
+  "description": "BMAS HR Management System",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder"
+  },
+  "keywords": [
+    "hr",
+    "payroll",
+    "electron"
+  ],
+  "author": "BMAS",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "electron": "^39.2.4"
+  },
+  "devDependencies": {
+    "electron-builder": "^24.0.0"
+  }
+}

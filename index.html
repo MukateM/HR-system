@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMAS HR System</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        .login-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('assets/bmas-logo.png');
+    background-size: 80px;
+    background-repeat: repeat;
+    opacity: 0.03;
+    pointer-events: none;
+}
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+        }
+        
+        .brand-primary {
+            background-color: var(--primary-color);
+        }
+        
+        .brand-secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        .login-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .employee-table th, .employee-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .employee-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .active-nav {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.inactive-nav {
+    color: #6b7280 !important;
+    background-color: transparent !important;
+}
+
+.inactive-nav:hover {
+    background-color: #f3f4f6 !important;
+    color: var(--primary-color) !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Ensure proper table styling */
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.employee-table th, .employee-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.employee-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+}
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Login Screen -->
+<div id="loginScreen" class="min-h-screen login-container flex items-center justify-center p-4 relative overflow-hidden">
+    <!-- Background Pattern with Small Logos -->
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute inset-0" style="
+            background-image: url('assets/bmas-logo.png');
+            background-size: 100px;
+            background-repeat: repeat;
+            background-position: 0 0;
+        "></div>
+    </div>
+    
+    <!-- Main Login Card -->
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative z-10">
+        <!-- Main Logo -->
+        <div class="text-center mb-8">
+            <div class="flex justify-center mb-4">
+                <img src="assets/bmas-logo.png" alt="BMAS Logo" class="h-20 w-auto">
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800 mt-4">BMAS HR System</h1>
+            <p class="text-gray-600 mt-2">Business Momentum Advisory Services</p>
+        </div>
+        
+        <!-- Login Form -->
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="clientSelect">Select Client</label>
+            <div class="relative">
+                <select id="clientSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- Choose a Client --</option>
+                    <option value="client1">Zambia Tech Solutions</option>
+                    <option value="client2">Copperbelt Manufacturing</option>
+                    <option value="client3">Lusaka Retail Group</option>
+                    <option value="bmas">BMAS Admin</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
+            <input id="username" type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your username">
+        </div>
+        
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+            <input id="password" type="password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password">
+        </div>
+        
+        <button onclick="handleLogin()" class="w-full brand-primary hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
+            Sign In
+        </button>
+        
+        <div class="mt-6 text-center text-gray-600 text-sm">
+            <p>Need help? Contact BMAS Support</p>
+            <p class="mt-1">support@bmas.com | +260 211 123 456</p>
+        </div>
+    </div>
+</div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="hidden min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="sidebar bg-white w-64 shadow-lg flex flex-col">
+            <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-blue-800">
+              <div class="text-center">
+                <h2 id="clientName" class="font-bold text-lg text-white"></h2>
+                <p class="text-xs text-blue-100">HR Management Portal</p>
+            </div>
+        </div>
+            <nav class="flex-1">
+                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Main Navigation</div>
+                
+                <a href="#" class="nav-item block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">
+                    <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+                </a>
+                
+                <a href="#" class="nav-item block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">
+                    <i class="fas fa-users mr-3"></i>Employee Management
+                </a>
+                
+                <a href="#" class="nav-item block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">
+                    <i class="fas fa-calculator mr-3"></i>Payroll Calculator
+                </a>
+                
+                <a href="#" class="nav-item block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">
+                    <i class="fas fa-file-invoice-dollar mr-3"></i>Invoicing
+                </a>
+                
+                <a href="#" class="nav-item block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">
+                    <i class="fas fa-headset mr-3"></i>Service Requests
+                </a>
+                
+                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-6">Reports</div>
+                
+                <a href="#" class="nav-item block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">
+                    <i class="fas fa-chart-bar mr-3"></i>Analytics
+                </a>
+                
+                <a href="#" onclick="exportNAPSA()" class="nav-item block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">
+                    <i class="fas fa-file-export mr-3"></i>NAPSA Export
+                </a>
+                
+                <a href="#" onclick="exportNHIMA()" class="nav-item block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-150">
+                    <i class="fas fa-file-export mr-3"></i>NHIMA Export
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-gray-200 mt-auto">
+                <button onclick="handleLogout()" class="flex items-center text-gray-700 hover:text-red-600 transition duration-150 w-full">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <header class="bg-white shadow-sm z-10">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800" id="pageTitle">Dashboard</h1>
+                        <p class="text-sm text-gray-600" id="pageSubtitle">Welcome to your HR portal</p>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <button class="p-2 text-gray-600 hover:text-gray-900 rounded-full hover:bg-gray-100">
+                                <i class="fas fa-bell"></i>
+                            </button>
+                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                <span class="text-blue-600 font-semibold" id="userInitials">AD</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-700" id="userName">Admin User</p>
+                                <p class="text-xs text-gray-500" id="userRoleDisplay">System Administrator</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <main class="flex-1 p-6 overflow-auto">
+                <!-- Employee Management View -->
+                <div id="employeeManagementView" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-800">Employee Management</h1>
+                            <p class="text-sm text-gray-600">Manage your workforce and employee data</p>
+                        </div>
+                        <button id="addEmployeeBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
+                            <i class="fas fa-user-plus mr-2"></i>Add Employee
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="overflow-x-auto">
+                            <table class="employee-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <th>Full Name</th>
+                                        <th>NRC Number</th>
+                                        <th>SSN Number</th>
+                                        <th>Position</th>
+                                        <th>Salary (ZMW)</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="employeeTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payroll Calculator View -->
+                <div id="payrollView" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-800">Payroll Calculator</h1>
+                            <p class="text-sm text-gray-600">Calculate salaries and deductions for employees</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button id="calculatePayrollBtn" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
+                                <i class="fas fa-calculator mr-2"></i>Calculate Payroll
+                            </button>
+                            <button id="exportPayrollBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
+                                <i class="fas fa-file-export mr-2"></i>Export Payroll
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Payroll Month</label>
+                                <select id="payrollMonth" class="form-input">
+                                    <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+                                    <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+                                    <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+                                    <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Payroll Year</label>
+                                <input type="number" id="payrollYear" class="form-input" value="2025" min="2020" max="2030">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Payroll Date</label>
+                                <input type="date" id="payrollDate" class="form-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="overflow-x-auto">
+                            <table class="employee-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th><th>Position</th><th>Gross Salary</th><th>Basic Pay</th>
+                                        <th>Housing Allowance</th><th>Transport Allowance</th><th>NAPSA (5%)</th>
+                                        <th>PAYE</th><th>NHIMA (1%)</th><th>Other Deductions</th><th>Net Salary</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payrollResultsBody"></tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4 pt-4 border-t border-gray-200">
+                            <div class="text-center"><p class="text-sm text-gray-500">Total Gross</p><p class="text-lg font-bold text-gray-800" id="totalGross">ZMW 0</p></div>
+                            <div class="text-center"><p class="text-sm text-gray-500">Total NAPSA</p><p class="text-lg font-bold text-red-600" id="totalNapsa">ZMW 0</p></div>
+                            <div class="text-center"><p class="text-sm text-gray-500">Total PAYE</p><p class="text-lg font-bold text-red-600" id="totalPaye">ZMW 0</p></div>
+                            <div class="text-center"><p class="text-sm text-gray-500">Total NHIMA</p><p class="text-lg font-bold text-red-600" id="totalNhima">ZMW 0</p></div>
+                            <div class="text-center"><p class="text-sm text-gray-500">Total Net</p><p class="text-lg font-bold text-green-600" id="totalNet">ZMW 0</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard View -->
+                
+                <div id="dashboardView" class="pb-6">
+    <!-- Stats Cards - 3 columns -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
+        <!-- Card 1: Total Employees -->
+        <div class="bg-white rounded-lg shadow-sm p-4 border-l-4 border-blue-500">
+            <div class="flex items-center">
+                <div class="p-2 rounded-lg bg-blue-100 text-blue-600 mr-3">
+                    <i class="fas fa-users text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Total Employees</p>
+                    <h3 class="text-xl font-bold text-gray-800" id="totalEmployees">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Monthly Payroll -->
+        <div class="bg-white rounded-lg shadow-sm p-4 border-l-4 border-green-500">
+            <div class="flex items-center">
+                <div class="p-2 rounded-lg bg-green-100 text-green-600 mr-3">
+                    <i class="fas fa-file-invoice-dollar text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Monthly Payroll</p>
+                    <h3 class="text-xl font-bold text-gray-800" id="monthlyPayroll">ZMW 0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Pending Requests -->
+        <div class="bg-white rounded-lg shadow-sm p-4 border-l-4 border-purple-500">
+            <div class="flex items-center">
+                <div class="p-2 rounded-lg bg-purple-100 text-purple-600 mr-3">
+                    <i class="fas fa-tasks text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Pending Requests</p>
+                    <h3 class="text-xl font-bold text-gray-800" id="pendingRequests">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Employees on Leave -->
+        <div class="bg-white rounded-lg shadow-sm p-4 border-l-4 border-yellow-500">
+            <div class="flex items-center">
+                <div class="p-2 rounded-lg bg-yellow-100 text-yellow-600 mr-3">
+                    <i class="fas fa-calendar-alt text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Employees on Leave</p>
+                    <h3 class="text-xl font-bold text-gray-800" id="onLeaveCount">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: Assets Needing Attention -->
+        <div class="bg-white rounded-lg shadow-sm p-4 border-l-4 border-red-500">
+            <div class="flex items-center">
+                <div class="p-2 rounded-lg bg-red-100 text-red-600 mr-3">
+                    <i class="fas fa-exclamation-triangle text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Assets Needing Attention</p>
+                    <h3 class="text-xl font-bold text-gray-800" id="assetsNeedingAttention">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6: Contracts Expiring -->
+        <div class="bg-white rounded-lg shadow-sm p-4 border-l-4 border-indigo-500">
+            <div class="flex items-center">
+                <div class="p-2 rounded-lg bg-indigo-100 text-indigo-600 mr-3">
+                    <i class="fas fa-file-contract text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Contracts Expiring</p>
+                    <h3 class="text-xl font-bold text-gray-800" id="contractsExpiring">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Section - 2 columns -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Left Column: Recent Activity -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-md font-semibold text-gray-800">Recent Activity</h2>
+                <a href="#" class="text-xs text-blue-600 hover:text-blue-800">View All</a>
+            </div>
+            <div class="space-y-3">
+                <div class="flex items-start">
+                    <div class="p-1.5 rounded-lg bg-blue-100 text-blue-600 mr-2 mt-0.5">
+                        <i class="fas fa-user-plus text-xs"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-medium text-gray-800 truncate">New employee added</p>
+                        <p class="text-xs text-gray-500 truncate">John Mwila was added to the system</p>
+                        <p class="text-xs text-gray-400">2 hours ago</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="p-1.5 rounded-lg bg-green-100 text-green-600 mr-2 mt-0.5">
+                        <i class="fas fa-file-invoice text-xs"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-medium text-gray-800 truncate">Payroll processed</p>
+                        <p class="text-xs text-gray-500 truncate">October payroll has been calculated</p>
+                        <p class="text-xs text-gray-400">1 day ago</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="p-1.5 rounded-lg bg-yellow-100 text-yellow-600 mr-2 mt-0.5">
+                        <i class="fas fa-exclamation-triangle text-xs"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-medium text-gray-800 truncate">Service request submitted</p>
+                        <p class="text-xs text-gray-500 truncate">New support ticket for NHIMA compliance</p>
+                        <p class="text-xs text-gray-400">2 days ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Quick Actions -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <h2 class="text-md font-semibold text-gray-800 mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="document.getElementById('addEmployeeBtn').click()" class="p-3 border border-gray-200 rounded-lg text-center hover:bg-blue-50 hover:border-blue-300 transition duration-150 cursor-pointer">
+                    <div class="p-2 rounded-lg bg-blue-100 text-blue-600 inline-block mb-1">
+                        <i class="fas fa-user-plus text-sm"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-800">Add Employee</p>
+                </button>
+                
+                <button onclick="showLeaveManagement()" class="p-3 border border-gray-200 rounded-lg text-center hover:bg-green-50 hover:border-green-300 transition duration-150 cursor-pointer">
+                    <div class="p-2 rounded-lg bg-green-100 text-green-600 inline-block mb-1">
+                        <i class="fas fa-calendar-alt text-sm"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-800">Manage Leave</p>
+                </button>
+                
+                <button onclick="addAsset()" class="p-3 border border-gray-200 rounded-lg text-center hover:bg-purple-50 hover:border-purple-300 transition duration-150 cursor-pointer">
+                    <div class="p-2 rounded-lg bg-purple-100 text-purple-600 inline-block mb-1">
+                        <i class="fas fa-laptop text-sm"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-800">Add Asset</p>
+                </button>
+                
+                <button onclick="showUserManagement()" class="p-3 border border-gray-200 rounded-lg text-center hover:bg-red-50 hover:border-red-300 transition duration-150 cursor-pointer">
+                    <div class="p-2 rounded-lg bg-red-100 text-red-600 inline-block mb-1">
+                        <i class="fas fa-user-shield text-sm"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-800">User Management</p>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Add Employee Form Modal -->
+<div id="addEmployeeForm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800" id="formTitle">Add New Employee</h2>
+            <button onclick="closeEmployeeForm()" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
+        </div>
+        
+        <form id="employeeForm" onsubmit="saveEmployeeWithLeave(event)">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">Employee ID</label><input type="text" id="empId" class="form-input" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label><input type="text" id="empName" class="form-input" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">NRC Number</label><input type="text" id="empNrc" class="form-input" placeholder="123456/78/9" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">SSN Number</label><input type="text" id="empSsn" class="form-input" placeholder="Social Security Number" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label><input type="date" id="empDob" class="form-input" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">NHIMA Number</label><input type="text" id="empNhima" class="form-input" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">Position</label><input type="text" id="empPosition" class="form-input" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">Contract Length (months)</label><input type="number" id="empContractMonths" class="form-input" min="1" max="36" value="12" required onchange="updateLeaveCalculations()"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">Basic Salary (ZMW)</label><input type="number" id="empSalary" class="form-input" min="0" step="0.01" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-2">Allowances (ZMW)</label><input type="number" id="empAllowances" class="form-input" min="0" step="0.01" value="0"></div>
+            </div>
+            
+            <!-- Leave Entitlements Preview -->
+            <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold mb-3">Leave Entitlements (Auto-calculated)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+                    <div class="text-center p-2 bg-blue-50 rounded">
+                        <div class="font-medium">Annual</div>
+                        <div id="annualCalc" class="text-blue-600 font-bold">24 days</div>
+                    </div>
+                    <div class="text-center p-2 bg-green-50 rounded">
+                        <div class="font-medium">Sick</div>
+                        <div id="sickCalc" class="text-green-600 font-bold">180 days</div>
+                    </div>
+                    <div class="text-center p-2 bg-purple-50 rounded">
+                        <div class="font-medium">Maternity</div>
+                        <div id="maternityCalc" class="text-purple-600 font-bold">98 days</div>
+                    </div>
+                    <div class="text-center p-2 bg-yellow-50 rounded">
+                        <div class="font-medium">Paternity</div>
+                        <div id="paternityCalc" class="text-yellow-600 font-bold">5 days</div>
+                    </div>
+                    <div class="text-center p-2 bg-gray-100 rounded">
+                        <div class="font-medium">Unpaid</div>
+                        <div class="text-gray-600 font-bold">Unlimited</div>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Based on 2 days/month Annual, dismissal on medical grounds over 180 days</p>
+            </div>
+            
+            <div class="mb-6"><label class="block text-sm font-medium text-gray-700 mb-2">Bank Details</label><textarea id="empBank" class="form-input" rows="3" placeholder="Bank Name, Account Number, Branch..."></textarea></div>
+            <div class="mb-6"><label class="block text-sm font-medium text-gray-700 mb-2">Other Deductions (ZMW)</label><input type="number" id="empDeductions" class="form-input" min="0" step="0.01" value="0" placeholder="Advances, loans, union dues, etc."></div>
+            
+            <div class="flex justify-end space-x-3">
+                <button type="button" onclick="closeEmployeeForm()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Save Employee</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <script src="app.js"></script>
+    <script src="features.js"></script>
+</body>
+</html>
